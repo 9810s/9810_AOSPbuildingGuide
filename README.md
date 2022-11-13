@@ -5,9 +5,9 @@
 1. Requirements
 To build AOSP on 9810 devices, you must prepare:
 + A Linux environment (Ubuntu 18.04 or newer is recommended!).
-+ A 6-cores CPU and 16GB RAM or higher.
++ A 4-cores CPU and 16GB RAM or higher.
 + A good network! (Because you will need to sync 100GB+ of sources)
-+ 300GB or more storage.
++ 300GB or more storage. (256GB can also work, but more complicated)S
 + Basic knowledge about git.
 
 2.Steps
@@ -64,7 +64,7 @@ To build AOSP on 9810 devices, you must prepare:
   
   - It should look like this: 
     ```bash
-     repo init -u https://github.com/PixelExperience/manifest -b thirteen
+     repo init -u https://github.com/crdroidandroid/android.git -b 13.0 --depth 1
     ```
 
 + Cloning devices trees:
@@ -72,7 +72,7 @@ To build AOSP on 9810 devices, you must prepare:
   - Tip: https://github.com/SamsungExynos9810/local_manifests (All trees that we used to build is at here)
  ```bash
     while in rom folder do
-    git clone https://github.com/SamsungExynos9810/local_manifests .repo/local_manifests
+    git clone https://github.com/9810s/local_manifests .repo/local_manifests
  ```
 
   - Then download all the sources:
@@ -82,19 +82,24 @@ To build AOSP on 9810 devices, you must prepare:
 
   - Now wait!
 
-+ Modifying the trees for ROMs:
++ Modifying the trees for ROMs: (romfolder/device/samsung/starlte, star2lte and crownlte)
   - There are 3 files that you need to edit here: romname_device.mk, romname.dependencies, AndroidProducts.mk.
-  - So how to modify it to build the ROM you want?
-  - Easy, let's take Lineage 19.1 with beyond1lte as example
-	 (https://github.com/LineageOS/android_device_samsung_beyond1lte/tree/lineage-19.1)
-
-	+ In AndroidProducts.mk, you can see all has been changed into lineage_device.mk, so do the same for our device.
-	+ lineage.dependencies, just rename the file and don't touch anything in it.
-	+ lineage_beyond1lte.mk: you will need to change (necessary) PRODUCT_NAME into our 9810 devices (Example: PRODUCT_NAME := lineage_crownlte)
-  + then search for this line about vendor and change ROMNAME according to the rom you will build 
-    $(call inherit-product, vendor/ROMNAME/config/common_full_phone.mk) 
-    depending on ROM it can be $(call inherit-product, vendor/ROMNAME/config/common.mk) too.
-  - Now return to your rom repo, resync.
+  	- In the trees youre basically syncing with this tutorial, you can build lineageOS, crDroid and roms that use lineage.dependencies. 
+	
+	
+  [WE TAKE STAR2LTE AS AN EXAMPLE HERE!!!]
+  - If you are using a rom like sparkOS, you have to edit a few things: 
+  	- lineage_star2lte > spark_star2lte... i think you get me. anything with lineage in name will be spark for sparkOS
+	- then we also have to edit romname_devicee.mk:
+	EXAMPLE: ```bash
+	 nano spark_star2lte.mk
+	 ```
+	 - that will open a basic text editor in the terminal.
+	 there you edit stuff, that contain "lineage" to "spark"
+	 - then we nano into AndroidProducts.mk
+		-there we change "lineage" to "spark" as well.
+		
+	- you do that for star, star2 and crownlte.
 
 3. Build
     ```bash
